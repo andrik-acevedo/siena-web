@@ -1,0 +1,37 @@
+# ─────────────────────────────────────────────
+# Build & Publish
+# ─────────────────────────────────────────────
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# ─────────────────────────────────────────────
+# Netlify Functions
+# ─────────────────────────────────────────────
+[functions]
+  directory    = "netlify/serverless"
+  node_bundler = "esbuild"   # keep using esbuild for TypeScript/ESM
+
+# ─────────────────────────────────────────────
+# Redirects (API proxy + SPA fallback)
+# ─────────────────────────────────────────────
+[[redirects]]
+  from = "/api/*"
+  to   = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to   = "/index.html"
+  status = 200
+
+# ─────────────────────────────────────────────
+# Scheduled Functions
+# NOTE: The block name must match the file name in netlify/serverless/
+#       e.g. netlify/serverless/call-affiliate-payouts.ts -> "call-affiliate-payouts"
+# ─────────────────────────────────────────────
+[functions."call-affiliate-payouts"]
+  # Runs daily at 05:00 UTC (midnight Miami in winter, ~1am in summer)
+  schedule = "0 5 * * *"
+  # For more frequent testing, you can temporarily use:
+  # schedule = "*/15 * * * *"
