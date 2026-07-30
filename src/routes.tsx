@@ -176,9 +176,24 @@ export default function AppRoutes() {
           <Route path="/affiliate/onboarding/return" element={<PublicRoute><OnboardingReturn /></PublicRoute>} />
           <Route path="/affiliate/onboarding/refresh" element={<PublicRoute><OnboardingRefresh /></PublicRoute>} />
 
-          {/* Legal & Pricing (public) */}
-          <Route path="/privacy" element={<PublicRoute><PrivacyPolicy /></PublicRoute>} />
-          <Route path="/terms-of-service" element={<PublicRoute><TermsOfService /></PublicRoute>} />
+          {/*
+            Legal & Pricing (public)
+
+            /privacy and /terms-of-service are deliberately NOT wrapped in
+            PublicRoute. PublicRoute renders a spinner while the auth context
+            is initializing, which made these pages depend on Supabase being
+            reachable — if it is slow or misconfigured, the privacy policy URL
+            spins forever. That URL is the one registered with App Store
+            Connect and the basis of our 5.1.1(i) response, so it has to
+            render instantly and unconditionally.
+
+            Both are pure static text with no auth, fetch or data dependency,
+            so the wrapper bought nothing. PublicRoute's only other behaviour
+            is redirecting authenticated users away from /login, /register and
+            /, which never applied to these paths.
+          */}
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/affiliate-terms" element={<PublicRoute><AffiliateTermsPage /></PublicRoute>} />
           <Route path="/pricing" element={<PublicRoute><PricingPage /></PublicRoute>} />
 
