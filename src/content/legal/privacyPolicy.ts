@@ -244,9 +244,18 @@ export const PRIVACY_POLICY: LegalDocument = {
           kind: 'p',
           text: 'In the Siena mobile app, AI features are gated behind a separate consent step. You are asked to agree before any content is sent to OpenAI, you can decline, and you can withdraw that consent at any time from your profile settings. Declining does not prevent you from using the rest of the app; the AI features simply do not run.',
         },
+        { kind: 'h', text: 'Automated safety checks' },
         {
           kind: 'p',
-          text: 'Siena\'s AI features are not human-monitored. Automated classification is used to surface crisis resources when text appears to indicate risk of self-harm, and a flag indicating that a conversation triggered this is stored on your account. This is an automated process only. It is not a monitoring service, it does not summon help, and it is not a substitute for emergency services.',
+          text: 'Text you write in Siena chat, AI guide threads, and journal entries is automatically checked for signs of self-harm, so that crisis resources can be shown to you. This happens in two layers: a keyword check that runs entirely on your device and sends nothing anywhere, and, only if you have consented to AI features, an automated classification performed by OpenAI.',
+        },
+        {
+          kind: 'p',
+          text: 'If a check indicates possible risk, Siena displays a screen of crisis resources and records that the event occurred. That record contains only the feature it occurred in, which layer was triggered, and the category returned. It does not contain the text you wrote. Conversations with Siena chat additionally carry a flag noting that the conversation triggered a check.',
+        },
+        {
+          kind: 'p',
+          text: 'These checks are automated only. No person at Siena monitors your account or your content, no one is alerted, and emergency services are not contacted. The checks are not a clinical risk assessment, they can miss signs of risk, and they are not a substitute for emergency services.',
         },
       ],
     },
