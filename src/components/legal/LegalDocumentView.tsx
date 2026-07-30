@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowLeft, AlertTriangle, Scale } from 'lucide-react';
 import type { LegalBlock, LegalDocument } from '../../content/legal/types';
+import { COUNSEL_NOTES } from '../../content/legal/counselNotes';
 
 /**
  * Renders a Siena legal document.
@@ -74,7 +75,12 @@ function Block({ block }: { block: LegalBlock }) {
 }
 
 export default function LegalDocumentView({ doc }: { doc: LegalDocument }) {
-  const flagged = doc.sections.filter((s) => s.counselReview);
+  // In public builds __LEGAL_REVIEW__ is a literal false, so everything below
+  // that depends on it — including the COUNSEL_NOTES import — is dropped by the
+  // bundler. See reviewMode.ts before changing this to a runtime value.
+  const flagged = __LEGAL_REVIEW__
+    ? doc.sections.filter((s) => COUNSEL_NOTES[s.id])
+    : [];
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
@@ -92,7 +98,7 @@ export default function LegalDocumentView({ doc }: { doc: LegalDocument }) {
             Last Updated: {doc.lastUpdated} · Effective: {doc.effective}
           </p>
 
-          {doc.draft && (
+          {__LEGAL_REVIEW__ && (
             <div className="mb-8 border-2 border-amber-400 bg-amber-50 rounded-lg p-4">
               <div className="flex items-start">
                 <AlertTriangle className="h-5 w-5 text-amber-600 mr-2 mt-0.5 shrink-0" />
@@ -110,7 +116,7 @@ export default function LegalDocumentView({ doc }: { doc: LegalDocument }) {
             </div>
           )}
 
-          {doc.draft && flagged.length > 0 && (
+          {flagged.length > 0 && (
             <div className="mb-8 border border-gray-300 bg-gray-50 rounded-lg p-4">
               <div className="flex items-center mb-2">
                 <Scale className="h-4 w-4 text-gray-700 mr-2" />
@@ -156,13 +162,13 @@ export default function LegalDocumentView({ doc }: { doc: LegalDocument }) {
                   {section.title}
                 </h2>
 
-                {section.counselReview && (
+                {__LEGAL_REVIEW__ && COUNSEL_NOTES[section.id] && (
                   <div className="mb-4 border-l-4 border-amber-400 bg-amber-50 p-3 rounded-r">
                     <p className="text-xs font-bold text-amber-900 uppercase tracking-wide mb-1">
                       Counsel review required
                     </p>
                     <p className="text-sm text-amber-900 leading-relaxed">
-                      {section.counselReview}
+                      {COUNSEL_NOTES[section.id]}
                     </p>
                   </div>
                 )}

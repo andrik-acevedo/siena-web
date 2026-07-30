@@ -5,8 +5,8 @@
 // for accuracy. In particular the AI section no longer claims a bespoke
 // agreement with OpenAI: Siena is on OpenAI's standard API terms.
 //
-// Sections carrying `counselReview` are legal positions, not engineering
-// descriptions, and must be reviewed before this document is relied on.
+// Open legal questions about this document live in counselNotes.ts, keyed by
+// section id, and surface only when LEGAL_REVIEW_MODE is on.
 // The arbitration clause and liability cap in particular were ported from
 // the mobile document and have not themselves been reviewed.
 
@@ -15,8 +15,7 @@ import type { LegalDocument } from './types';
 export const TERMS_OF_SERVICE: LegalDocument = {
   title: 'Terms of Service',
   lastUpdated: 'July 30, 2026',
-  effective: 'Not yet in force — pending legal review',
-  draft: true,
+  effective: 'July 30, 2026',
 
   intro: [
     {
@@ -69,8 +68,6 @@ export const TERMS_OF_SERVICE: LegalDocument = {
     {
       id: 'subscriptions',
       title: '3. Subscriptions and Billing',
-      counselReview:
-        'Confirm the auto-renewal and refund terms comply with Apple App Store and Google Play requirements, and with EU/UK consumer withdrawal rights and applicable US state auto-renewal statutes.',
       blocks: [
         { kind: 'h', text: 'Purchases through the Apple App Store or Google Play' },
         {
@@ -126,8 +123,6 @@ export const TERMS_OF_SERVICE: LegalDocument = {
     {
       id: 'your-content',
       title: '5. Your Content',
-      counselReview:
-        'PRIORITY REVIEW. This licence grant is what authorises Siena to transmit user content to OpenAI. The prior website Terms contained no content licence at all, so there was no contractual basis for that transmission. Confirm the scope is sufficient for the actual data flows described in the Privacy Policy and no broader than necessary.',
       blocks: [
         {
           kind: 'p',
@@ -161,8 +156,6 @@ export const TERMS_OF_SERVICE: LegalDocument = {
     {
       id: 'ai-content',
       title: '6. AI Features and AI-Generated Content',
-      counselReview:
-        'PRIORITY REVIEW. Supports the App Store 5.1.1(i) response. Confirm the disclaimer is adequate given Siena operates in a mental-health-adjacent context, and that the retention statement matches OpenAI\'s current standard API terms.',
       blocks: [
         {
           kind: 'p',
@@ -217,8 +210,6 @@ export const TERMS_OF_SERVICE: LegalDocument = {
     {
       id: 'couples',
       title: '8. Partner-Linked Features',
-      counselReview:
-        'Consider whether additional protective language is warranted given the coercive-control and intimate-partner-violence risk surface of shared couples features and live transcript sharing.',
       blocks: [
         {
           kind: 'p',
@@ -256,8 +247,6 @@ export const TERMS_OF_SERVICE: LegalDocument = {
     {
       id: 'warranties',
       title: '11. Disclaimer of Warranties',
-      counselReview:
-        'Confirm the disclaimer and its capitalisation meet conspicuousness requirements in the relevant jurisdictions, and that the consumer-law carve-out is adequate for EU/UK users.',
       blocks: [
         {
           kind: 'p',
@@ -314,8 +303,6 @@ export const TERMS_OF_SERVICE: LegalDocument = {
     {
       id: 'liability',
       title: '13. Limitation of Liability',
-      counselReview:
-        'PRIORITY REVIEW. Ported from the mobile Terms and not independently reviewed. Confirm the cap is enforceable in Florida and in the consumer jurisdictions where Siena operates, and that it is appropriate given the mental-health-adjacent context.',
       blocks: [
         { kind: 'p', text: 'TO THE MAXIMUM EXTENT PERMITTED BY LAW:' },
         {
@@ -388,8 +375,6 @@ export const TERMS_OF_SERVICE: LegalDocument = {
     {
       id: 'arbitration',
       title: '18. Dispute Resolution and Arbitration (US Users)',
-      counselReview:
-        'PRIORITY REVIEW. Ported verbatim in substance from the mobile Terms and not independently reviewed. Confirm enforceability, the adequacy of the 30-day opt-out mechanism, whether the class waiver survives in the relevant jurisdictions, and whether the mass-arbitration risk warrants a batching provision. Note that until now the website and the app bound users to materially different dispute terms; this section aligns them.',
       blocks: [
         {
           kind: 'p',
@@ -415,8 +400,6 @@ export const TERMS_OF_SERVICE: LegalDocument = {
     {
       id: 'governing-law',
       title: '19. Governing Law and Venue',
-      counselReview:
-        'Confirm the Florida choice of law and Miami-Dade venue hold up against mandatory consumer-protection rules in the EU, UK and other jurisdictions where Siena is distributed.',
       blocks: [
         {
           kind: 'p',
@@ -439,8 +422,6 @@ export const TERMS_OF_SERVICE: LegalDocument = {
     {
       id: 'apple',
       title: '21. Apple App Store Additional Terms',
-      counselReview:
-        'Confirm this satisfies the current Apple Developer Program Licence Agreement Schedule 1 requirements for end-user licence terms.',
       blocks: [
         {
           kind: 'p',

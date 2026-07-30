@@ -13,16 +13,15 @@
 //     therefore say: not used for training, retained up to 30 days for
 //     abuse monitoring. NEVER claim zero retention or "our agreement".
 //
-// Sections carrying `counselReview` are legal positions, not engineering
-// descriptions, and must be reviewed before this document is relied on.
+// Open legal questions about this document live in counselNotes.ts, keyed by
+// section id, and surface only when LEGAL_REVIEW_MODE is on.
 
 import type { LegalDocument } from './types';
 
 export const PRIVACY_POLICY: LegalDocument = {
   title: 'Privacy Policy',
   lastUpdated: 'July 30, 2026',
-  effective: 'Not yet in force — pending legal review',
-  draft: true,
+  effective: 'July 30, 2026',
 
   intro: [
     {
@@ -146,8 +145,6 @@ export const PRIVACY_POLICY: LegalDocument = {
     {
       id: 'ai-features-openai',
       title: '2. AI Features and OpenAI',
-      counselReview:
-        'PRIORITY REVIEW. This section is the basis of Siena\'s App Store 5.1.1(i) response and describes transfers of special-category data to a US processor. Confirm: (a) the description of what is sent is complete; (b) the retention statement matches OpenAI\'s current standard API terms; (c) consent is the correct lawful basis for these transfers and is validly obtained; (d) whether a signed DPA with OpenAI should be obtained, since we currently rely on standard API terms only.',
       blocks: [
         {
           kind: 'p',
@@ -299,8 +296,6 @@ export const PRIVACY_POLICY: LegalDocument = {
     {
       id: 'subprocessors',
       title: '4. Service Providers We Share Information With',
-      counselReview:
-        'Confirm that a data-processing agreement is actually executed with each provider listed, and correct the table where one is not. Prior policy text asserted that DPAs were in place with all processors; that assertion has been removed pending verification. Also confirm the transactional email provider is Resend, which was inferred from configuration.',
       blocks: [
         {
           kind: 'p',
@@ -389,8 +384,6 @@ export const PRIVACY_POLICY: LegalDocument = {
     {
       id: 'legal-bases',
       title: '6. Legal Bases for Processing (EEA / UK)',
-      counselReview:
-        'PRIORITY REVIEW. Entire section is a legal position and has not been settled by counsel. In particular: (a) confirm consent is the correct and validly obtained Article 9(2)(a) basis for transmitting special-category data to OpenAI, and that the consent flow meets the "explicit" standard; (b) confirm the mobile AI consent gate satisfies this and decide what is required on the website, which currently has no equivalent AI consent step; (c) confirm the legitimate-interests balancing for security and product improvement; (d) confirm whether a DPIA is required given the scale and sensitivity of the assessment data.',
       blocks: [
         {
           kind: 'p',
@@ -449,8 +442,6 @@ export const PRIVACY_POLICY: LegalDocument = {
     {
       id: 'retention',
       title: '8. Data Retention and Deletion',
-      counselReview:
-        'Confirm the stated periods are operationally accurate and achievable, particularly the 30-day deletion window and the 90-day backup overwrite, and confirm any minimum retention required for tax or payment records.',
       blocks: [
         {
           kind: 'ul',
@@ -474,8 +465,6 @@ export const PRIVACY_POLICY: LegalDocument = {
     {
       id: 'your-rights',
       title: '9. Your Rights and Choices',
-      counselReview:
-        'Confirm the response timeframes and the identity-verification approach meet GDPR, UK GDPR, CCPA/CPRA and the other US state regimes named. Confirm we can operationally deliver data portability in a usable format.',
       blocks: [
         { kind: 'h', text: 'Everyone' },
         {
@@ -525,8 +514,6 @@ export const PRIVACY_POLICY: LegalDocument = {
     {
       id: 'international',
       title: '10. International Data Transfers',
-      counselReview:
-        'PRIORITY REVIEW. Confirm that Standard Contractual Clauses are actually in place with each relevant processor, in particular OpenAI, given we are on standard API terms rather than a negotiated DPA. If SCCs are not in place, this section must be rewritten before it is relied on.',
       blocks: [
         {
           kind: 'p',

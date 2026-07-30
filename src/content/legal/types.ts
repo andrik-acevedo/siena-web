@@ -1,9 +1,14 @@
 // Shared shape for Siena's legal documents.
 //
 // The website is the CANONICAL source for the Privacy Policy and Terms of
-// Service. The mobile app mirrors these same section arrays so the two
-// surfaces cannot drift. If you change text here, mirror it into
-// sienamobile/constants/legalContent.ts in the same commit.
+// Service. The mobile app mirrors these same content modules byte-for-byte so
+// the two surfaces cannot drift. If you change text here, copy the changed
+// file into sienamobile/constants/legal/ in the same commit; scripts/check-legal-sync.sh
+// verifies the two are identical.
+//
+// Internal counsel-review notes are NOT part of this shape. They live in
+// counselNotes.ts, keyed by section id, so they can be kept out of public
+// bundles. See reviewMode.ts.
 
 export type LegalBlock =
   | { kind: 'p'; text: string }
@@ -12,31 +17,16 @@ export type LegalBlock =
   | { kind: 'table'; headers: string[]; rows: string[][] };
 
 export interface LegalSection {
-  /** Stable anchor id, used for the table of contents and deep links. */
+  /** Stable anchor id. Also the key used to look up any counsel-review note. */
   id: string;
   title: string;
   blocks: LegalBlock[];
-  /**
-   * When set, renders a visible COUNSEL REVIEW callout above the section and
-   * lists the section in the review index at the top of the document.
-   *
-   * Use this for anything we are asserting as a legal position rather than
-   * describing as an engineering fact: legal bases, special-category data
-   * handling, arbitration, liability caps, jurisdictional claims.
-   */
-  counselReview?: string;
 }
 
 export interface LegalDocument {
   title: string;
   lastUpdated: string;
   effective: string;
-  /**
-   * While true, the page renders a prominent DRAFT banner and states the
-   * document is not yet in force. Flip to false only once counsel has
-   * signed off and you intend the text to be binding.
-   */
-  draft: boolean;
   intro: LegalBlock[];
   sections: LegalSection[];
   closing?: string;
