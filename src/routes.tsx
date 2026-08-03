@@ -9,6 +9,7 @@ import LoginForm from './components/auth/LoginForm';
 import AuthLogin from './components/auth/AuthLogin';
 import RegisterForm from './components/auth/RegisterForm';
 import InviteSignupForm from './components/auth/InviteSignupForm';
+import InvitePage from './components/invite/InvitePage';
 import PersonalClientSignup from './components/auth/PersonalClientSignup';
 import CompSignupPage from './components/auth/CompSignupPage'; // ✅ NEW IMPORT
 import ForgotPasswordForm from './components/auth/ForgotPasswordForm';
@@ -141,7 +142,10 @@ export default function AppRoutes() {
     '/register',
     '/forgot-password',
     '/reset-password',
-    '/invite',
+    // '/invite' is intentionally absent: the invite landing page is a
+    // standalone full-screen page and renders its own layout. The signup form
+    // that moved to /invite/signup keeps the shared header it always had.
+    '/invite/signup',
     '/comp-signup',
     '/patient-signup', // ✅ treat as public for redirect
     '/',
@@ -161,7 +165,19 @@ export default function AppRoutes() {
           <Route path="/" element={<PublicRoute><LoginForm /></PublicRoute>} />
           <Route path="/login" element={<PublicRoute><AuthLogin /></PublicRoute>} />
           <Route path="/register" element={<PublicRoute><RegisterForm /></PublicRoute>} />
-          <Route path="/invite" element={<PublicRoute><InviteSignupForm /></PublicRoute>} />
+          {/*
+            /invite is the landing page for partner invites shared from the
+            mobile app. Like the legal pages it is NOT wrapped in PublicRoute:
+            it is static, collects nothing, and must render instantly rather
+            than waiting on the auth context to initialize.
+
+            The web signup form that previously lived here moved to
+            /invite/signup and is still reachable. Older web-generated links
+            pointing at /invite?code= still work: the landing page reads the
+            same param, stores it, and offers the browser signup path.
+          */}
+          <Route path="/invite" element={<InvitePage />} />
+          <Route path="/invite/signup" element={<PublicRoute><InviteSignupForm /></PublicRoute>} />
 
           {/* ✅ NEW: Comp signup page */}
           <Route path="/comp-signup" element={<PublicRoute><CompSignupPage /></PublicRoute>} />
