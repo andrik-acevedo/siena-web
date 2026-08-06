@@ -1,66 +1,34 @@
+// The website is a static informational site: the homepage, the legal
+// documents, and the /invite landing page. It is NOT the Siena app.
+//
+// Accounts and user content live in the Siena mobile app, on a different
+// Supabase project. This site therefore mounts no auth/subscription providers
+// and makes no network calls. The former web-app components are still in the
+// repo but are no longer routed, so they tree-shake out of the bundle.
+//
+// Three things were deliberately removed here:
+//   - UserProvider / SubscriptionProvider / MessageLimitProvider
+//   - the authState 'initializing' spinner, which gated EVERY route on
+//     Supabase resolving. That is why /privacy could hang: the URL Apple
+//     checks must render on first paint, unconditionally.
+//   - the testSupabaseConnection() effect, which queried `profiles` on boot.
+//
+// useUser() returns inert defaults when no provider is mounted (see
+// UserContext), so the homepage and Header still render.
+
 import { BrowserRouter as Router } from 'react-router-dom';
-import { UserProvider } from './context/UserContext';
-import { SubscriptionProvider } from './context/SubscriptionContext';
-import { MessageLimitProvider } from './context/MessageLimitContext';
+import { Toaster } from 'react-hot-toast';
 import AppRoutes from './routes.tsx';
-import { Loader2 } from 'lucide-react';
-import { useUser } from './context/UserContext';
-import { useEffect } from 'react';
-import { testSupabaseConnection } from './lib/supabase-test';
-import { Toaster } from 'react-hot-toast'; // ⬅️ add this
-
-function AppContent() {
-  const { authState } = useUser();
-
-  console.log('🔄 App render state:', {
-    authStatus: authState.status,
-    hasUser: !!authState.user,
-    hasError: !!authState.error,
-    timestamp: new Date().toISOString()
-  });
-
-  useEffect(() => {
-    async function testConnection() {
-      const result = await testSupabaseConnection();
-      if (result.success) {
-        console.log('🔌 Supabase connection test: ✅ Connected');
-      } else {
-        console.log('🔌 Supabase connection test: ⚠️ Failed (may be normal during development)');
-      }
-    }
-    testConnection();
-  }, []);
-
-  if (authState.status === 'initializing') {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FFFFFF]">
-        <Loader2 className="h-8 w-8 text-brand-green animate-spin" />
-      </div>
-    );
-  }
-
-  return (
-    <div className="relative z-0 min-h-screen w-full bg-[#FFFFFF] text-white overflow-x-hidden flex flex-col">
-      <div className="flex-grow">
-        <AppRoutes />
-      </div>
-
-      {/* Toasts */}
-      <Toaster position="top-right" />
-    </div>
-  );
-}
 
 function App() {
   return (
     <Router>
-      <UserProvider>
-        <SubscriptionProvider>
-          <MessageLimitProvider>
-            <AppContent />
-          </MessageLimitProvider>
-        </SubscriptionProvider>
-      </UserProvider>
+      <div className="relative z-0 min-h-screen w-full bg-[#FFFFFF] text-white overflow-x-hidden flex flex-col">
+        <div className="flex-grow">
+          <AppRoutes />
+        </div>
+        <Toaster position="top-right" />
+      </div>
     </Router>
   );
 }

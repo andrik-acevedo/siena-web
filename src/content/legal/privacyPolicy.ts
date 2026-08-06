@@ -30,7 +30,7 @@ export const PRIVACY_POLICY: LegalDocument = {
     },
     {
       kind: 'p',
-      text: 'This Privacy Policy explains what information we collect, how we use it, who we share it with, how long we keep it, and the rights you have. It covers the Siena mobile apps and the Siena website, which share a single account and a single backend.',
+      text: 'This Privacy Policy explains what information we collect, how we use it, who we share it with, how long we keep it, and the rights you have. Your Siena account and the content you create live in the Siena mobile app. The Siena website hosts information about Siena and these legal documents; it does not share the mobile app\'s database, and creating an account or entering content on the website is not part of how Siena works. Where this policy describes your account, your content and your rights, it is describing the mobile app.',
     },
     {
       kind: 'p',

@@ -1,14 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import Button from '../ui/Button';
-import { useUser } from '../../context/UserContext';
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
-  const { userData } = useUser(); // includes display_name, avatar_url, avatar_emoji
 
   useEffect(() => {
     setIsMenuOpen(false);
@@ -21,11 +18,7 @@ export default function Header() {
   }, []);
 
   // Safe fallbacks if profile hasn’t loaded yet
-  const handle = userData?.display_name || 'Member';
-  const emoji = userData?.avatar_emoji || '🌿';
-  const avatarUrl = (userData as any)?.avatar_url || null;
 
-  const isAuthed = Boolean(userData?.id);
 
   return (
     <header
@@ -48,26 +41,8 @@ export default function Header() {
             Pricing
           </Link>
 
-          {!isAuthed ? (
-            <Link to="/login">
-              <Button className="ml-2">Log In</Button>
-            </Link>
-          ) : (
-            <Link
-              to="/settings"
-              className="ml-2 inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-white hover:bg-white/20 transition"
-              title="Account settings"
-            >
-              <span className="h-6 w-6 rounded-full bg-white/10 overflow-hidden flex items-center justify-center">
-                {avatarUrl ? (
-                  <img src={avatarUrl} alt={handle} className="h-full w-full object-cover" />
-                ) : (
-                  <span className="text-xl leading-none">{emoji}</span>
-                )}
-              </span>
-              <span className="text-sm font-medium">{handle}</span>
-            </Link>
-          )}
+          {/* Auth entry point removed: the web app is no longer routed and
+              accounts live in the Siena mobile app. */}
         </nav>
 
         {/* Mobile menu button */}
@@ -101,35 +76,7 @@ export default function Header() {
               Pricing
             </Link>
 
-            {!isAuthed ? (
-              <Link
-                to="/login"
-                className="w-full"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <Button className="w-full text-white">Log In</Button>
-              </Link>
-            ) : (
-              <Link
-                to="/settings"
-                onClick={() => setIsMenuOpen(false)}
-                className="w-full"
-              >
-                <div className="w-full flex items-center gap-3 rounded-xl bg-white/10 px-4 py-3 text-white">
-                  <span className="h-8 w-8 rounded-full bg-white/10 overflow-hidden flex items-center justify-center">
-                    {avatarUrl ? (
-                      <img src={avatarUrl} alt={handle} className="h-full w-full object-cover" />
-                    ) : (
-                      <span className="text-2xl leading-none">{emoji}</span>
-                    )}
-                  </span>
-                  <div className="flex flex-col">
-                    <span className="text-base font-semibold">{handle}</span>
-                    <span className="text-xs text-white/70">Account settings</span>
-                  </div>
-                </div>
-              </Link>
-            )}
+            {/* Auth entry point removed: see the desktop nav above. */}
           </div>
         </div>
       )}

@@ -148,16 +148,12 @@ export default function InvitePage() {
                 View on Google Play
               </a>
             </div>
-            <p className="mt-6 text-sm text-gray-500">
-              Prefer your browser?{' '}
-              <Link
-                to={`/invite/signup${code ? `?code=${encodeURIComponent(code)}` : ''}`}
-                className="text-brand-green font-semibold hover:underline"
-              >
-                Continue signing up here
-              </Link>
-              .
-            </p>
+            {/* No "continue in your browser" option on purpose. There is no
+                web signup: accounts live in the mobile app, and the web
+                signup form validated invite codes against a different
+                Supabase project, so a code from the app would always have
+                been rejected there. Sending people down that path would fail
+                with a misleading "invalid code". */}
           </div>
         ) : (
           <a

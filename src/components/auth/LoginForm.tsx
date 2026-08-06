@@ -31,11 +31,53 @@ import {
   Sparkles,
   Target,
 } from 'lucide-react';
-import { supabase } from '../../lib/supabase';
 import Button from '../ui/Button';
-import { useUser } from '../../context/UserContext';
-import { getAffiliateByCode, trackReferralSignup } from '../../lib/affiliateService';
 import { generateUniqueHandle } from '../../lib/handle';
+
+// ---------------------------------------------------------------------------
+// Inert web-app shims
+// ---------------------------------------------------------------------------
+//
+// This component is the homepage, and it is the only routed thing that used to
+// reach the backend. Importing lib/supabase (directly, or transitively via
+// UserContext and affiliateService) pulled the whole supabase-js library into
+// the static site's bundle and constructed a client at page load. The site is
+// meant to make no network requests at all: accounts and user content live in
+// the Siena mobile app, on a different Supabase project.
+//
+// The sign-in, sign-up and checkout handlers below are unreachable in any
+// useful sense now that no auth provider is mounted. These shims keep their
+// code shape intact so the page renders identically, while guaranteeing
+// nothing can reach the network. The homepage is due to be replaced by a real
+// landing page; delete these along with it.
+
+const WEB_APP_DISABLED =
+  'The Siena web app is not available. Please use the Siena mobile app.';
+
+const supabase: any = {
+  auth: {
+    getUser: async () => {
+      throw new Error(WEB_APP_DISABLED);
+    },
+  },
+  from: () => {
+    throw new Error(WEB_APP_DISABLED);
+  },
+};
+
+const useUser = () => ({
+  signIn: async (_email: string, _password: string): Promise<void> => {
+    throw new Error(WEB_APP_DISABLED);
+  },
+  signUp: async (_email: string, _password: string, _opts?: unknown): Promise<{ user: any }> => {
+    throw new Error(WEB_APP_DISABLED);
+  },
+});
+
+const EDGE_BASE = '';
+const getAffiliateByCode = async (_code: string): Promise<any> => null;
+const trackReferralSignup = async (_args: unknown): Promise<void> => {};
+
 
 // ---------------------------------------------------------------------------
 // Types and pricing constants
@@ -377,23 +419,12 @@ export default function LoginForm() {
     if (referralCode) sessionStorage.setItem('pending_referral_code', String(referralCode));
   }, [referralCode]);
 
-  // If user signs in and had a pending paid plan intent, auto-continue to checkout
-  useEffect(() => {
-    (async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const wantedPlan = sessionStorage.getItem('pending_plan') as PlanKey | null;
-      const wantedPeriod = sessionStorage.getItem('pending_billing_period') as PeriodKey | null;
-
-      if (wantedPlan && wantedPeriod) {
-        sessionStorage.removeItem('pending_plan');
-        if (wantedPeriod !== billingPeriod) setBillingPeriod(wantedPeriod);
-        await beginCheckout(wantedPlan); // will see user is logged in and proceed
-      }
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Resume-checkout-after-sign-in effect removed.
+  //
+  // It called supabase.auth.getUser() on mount, which was the last network
+  // request the homepage made. The web app is no longer routed and there is no
+  // web signup or checkout, so there is no pending plan intent to resume.
+  // Restore this only if web auth returns.
 
   // Pricing helpers
   const displayPrice = (plan: PlanKey) =>
@@ -508,12 +539,17 @@ export default function LoginForm() {
       }
 
       // Authenticated → create checkout
+      //
+      // EDGE_BASE replaces import.meta.env.VITE_SUPABASE_URL here. Vite inlines
+      // that variable at build time, which left the old Supabase project's URL
+      // embedded in the static site's bundle even though this path is dead: the
+      // supabase shim above throws before execution reaches it. There is no web
+      // checkout; subscriptions are purchased in the mobile app.
       const resp = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/create-checkout`,
+        `${EDGE_BASE}/functions/v1/create-checkout`,
         {
           method: 'POST',
           headers: {
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({

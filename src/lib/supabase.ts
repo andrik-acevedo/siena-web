@@ -4,11 +4,23 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
 
+// Deliberately does NOT throw when the variables are absent.
+//
+// The website is static and mounts no auth providers, so nothing on it should
+// reach Supabase at all. This module survives only as a dependency of the
+// unrouted former web-app components. Throwing at import time meant a missing
+// env var took the whole site down, including the legal pages, so the build
+// could not be made env-free. Placeholders keep createClient happy; any call
+// through this client would fail at request time, which is the correct
+// outcome for a surface that should not be making requests.
 if (!supabaseUrl || !supabaseAnonKey) {
   const missing: string[] = [];
   if (!supabaseUrl) missing.push('VITE_SUPABASE_URL');
   if (!supabaseAnonKey) missing.push('VITE_SUPABASE_ANON_KEY');
-  throw new Error(`Missing Supabase environment variables: ${missing.join(', ')}`);
+  console.warn(
+    `[supabase] Missing ${missing.join(', ')}. The website does not use a ` +
+      'backend; accounts live in the Siena mobile app.',
+  );
 }
 
 /** Avoid blowing up if window/localStorage aren’t available */
@@ -54,7 +66,12 @@ const wrappedFetch: typeof fetch = async (url, options = {}) => {
 };
 
 /** Create the browser client */
-export const supabase: SupabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
+// Placeholders so createClient never receives undefined now that the guard
+// above warns instead of throwing. These are unreachable hosts on purpose.
+export const supabase: SupabaseClient = createClient(
+  supabaseUrl ?? 'https://unconfigured.invalid',
+  supabaseAnonKey ?? 'unconfigured',
+  {
   auth: {
     autoRefreshToken: true,
     persistSession: true,

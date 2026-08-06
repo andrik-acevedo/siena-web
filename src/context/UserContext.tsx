@@ -646,10 +646,47 @@ function UserProvider({ children }: { children: ReactNode }) {
   );
 }
 
+/**
+ * Inert fallback used when no UserProvider is mounted.
+ *
+ * The website no longer runs the web app: App.tsx does not mount UserProvider,
+ * so nothing here talks to Supabase and the site makes no network calls. The
+ * homepage and Header still call useUser(), and this hook used to throw
+ * without a provider, which would have white-screened both.
+ *
+ * status is 'unauthenticated' rather than 'initializing' on purpose: consumers
+ * treat 'initializing' as "wait" and would render spinners forever.
+ *
+ * The auth actions reject rather than resolve, so a submitted form surfaces an
+ * error instead of silently appearing to succeed. Accounts live in the mobile
+ * app; there is no web signup.
+ */
+const INERT_WEB_APP = 'The Siena web app is not available. Please use the Siena mobile app.';
+
+const inertUserContext: UserContextType = {
+  authState: { status: 'unauthenticated', user: null, error: null },
+  isLoading: false,
+  signIn: async () => {
+    throw new Error(INERT_WEB_APP);
+  },
+  signUp: async () => {
+    throw new Error(INERT_WEB_APP);
+  },
+  signOut: async () => {},
+  userData: null,
+  updateUserData: async () => {
+    throw new Error(INERT_WEB_APP);
+  },
+  acceptTerms: async () => {
+    throw new Error(INERT_WEB_APP);
+  },
+  resetPassword: async () => {
+    throw new Error(INERT_WEB_APP);
+  },
+};
+
 function useUser() {
-  const ctx = useContext(UserContext);
-  if (!ctx) throw new Error('useUser must be used within a UserProvider');
-  return ctx;
+  return useContext(UserContext) ?? inertUserContext;
 }
 
 export { UserProvider, useUser };
