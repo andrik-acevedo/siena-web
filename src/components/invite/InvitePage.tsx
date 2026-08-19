@@ -69,10 +69,6 @@ export default function InvitePage() {
     }
   };
 
-  const storeUrl = platform === 'android' ? PLAY_STORE_URL : APP_STORE_URL;
-  const storeLabel =
-    platform === 'android' ? 'Get Siena on Google Play' : 'Get Siena on the App Store';
-
   return (
     <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-16">
       <div className="w-full max-w-md">
@@ -119,50 +115,63 @@ export default function InvitePage() {
           </div>
         )}
 
-        {platform === 'desktop' ? (
-          <div className="text-center">
-            <div className="border border-gray-200 rounded-xl p-5 bg-gray-50 mb-5">
-              <p className="text-brand-blue font-semibold mb-1">
-                Open this link on your phone
-              </p>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                Siena is a mobile app. Open this page on your iPhone or Android
-                device to install it.
-              </p>
-            </div>
-            <div className="flex flex-col gap-2 text-sm">
-              <a
-                href={APP_STORE_URL}
-                className="text-brand-green font-semibold hover:underline"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                View on the App Store
-              </a>
-              <a
-                href={PLAY_STORE_URL}
-                className="text-brand-green font-semibold hover:underline"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                View on Google Play
-              </a>
-            </div>
-            {/* No "continue in your browser" option on purpose. There is no
-                web signup: accounts live in the mobile app, and the web
-                signup form validated invite codes against a different
-                Supabase project, so a code from the app would always have
-                been rejected there. Sending people down that path would fail
-                with a misleading "invalid code". */}
-          </div>
-        ) : (
+        {/* Primary action. Fires the app's deep link, which the app handles
+            whether it was already installed or has just been downloaded and
+            the visitor has come back to this page. There is no reliable way
+            to detect installation from the browser, so the helper text below
+            carries that instruction rather than any branching. */}
+        {code && platform !== 'desktop' && (
           <a
-            href={storeUrl}
-            className="block w-full text-center py-4 rounded-xl bg-brand-green text-white font-bold text-lg hover:opacity-90 transition-opacity"
+            href={`siena://invite?code=${encodeURIComponent(code)}`}
+            className="block w-full text-center py-4 rounded-xl bg-brand-green text-white font-bold text-lg hover:opacity-90 transition-opacity mb-3"
           >
-            {storeLabel}
+            Add as Partner
           </a>
         )}
+
+        {platform === 'desktop' ? (
+          <div className="border border-gray-200 rounded-xl p-5 bg-gray-50 mb-6 text-center">
+            <p className="text-brand-blue font-semibold mb-1">
+              Open this link on your phone
+            </p>
+            <p className="text-sm text-gray-600 leading-relaxed">
+              Siena is a mobile app. Open this page on your iPhone or Android
+              device, then tap "Add as Partner."
+            </p>
+          </div>
+        ) : (
+          <p className="text-sm text-gray-600 text-center leading-relaxed mb-6">
+            Already have Siena? Tap "Add as Partner." New here? Download below,
+            then come back and tap "Add as Partner."
+          </p>
+        )}
+
+        {/* Both stores, every platform. The visitor may be installing for a
+            partner on the other OS, and after installing they return here to
+            tap Add as Partner. */}
+        <div className="flex flex-col gap-2">
+          <a
+            href={APP_STORE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full text-center py-3 rounded-xl border border-gray-300 text-brand-blue font-semibold hover:bg-gray-50 transition-colors"
+          >
+            Download for iPhone
+          </a>
+          <a
+            href={PLAY_STORE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full text-center py-3 rounded-xl border border-gray-300 text-brand-blue font-semibold hover:bg-gray-50 transition-colors"
+          >
+            Download for Android
+          </a>
+        </div>
+
+        {/* No "continue in your browser" option on purpose. There is no web
+            signup: accounts live in the mobile app, and the web signup form
+            validated invite codes against a different Supabase project, so a
+            code from the app would always have been rejected there. */}
 
         <p className="mt-10 text-xs text-gray-400 text-center leading-relaxed">
           Siena is a self-guided wellness tool and is not a substitute for
