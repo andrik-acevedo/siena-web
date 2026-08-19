@@ -31,9 +31,14 @@ const APP_STORE_URL = 'https://apps.apple.com/app/id6786386711';
 const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.siena.wellness';
 
 /**
- * Store badge in the official house style: black pill, small eyebrow over the
- * wordmark. Drawn inline rather than loaded as an image so it stays crisp at
- * any density and needs no external asset.
+ * Official App Store / Google Play badge.
+ *
+ * Uses the supplied artwork rather than a drawn approximation: both stores
+ * require their badge to appear unmodified, so it is rendered as an image at a
+ * fixed height with width:auto to preserve the 3:1 aspect ratio.
+ *
+ * The badge already contains the wording, so the <img> alt carries the action
+ * for screen readers and the link needs no visible label.
  */
 function StoreBadge({ href, platform }: { href: string; platform: 'ios' | 'android' }) {
   const isIOS = platform === 'ios';
@@ -42,32 +47,20 @@ function StoreBadge({ href, platform }: { href: string; platform: 'ios' | 'andro
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label={isIOS ? 'Download Siena on the App Store' : 'Get Siena on Google Play'}
-      className="inline-flex items-center gap-3 rounded-xl bg-black px-5 py-3 text-white
-                 hover:bg-gray-900 focus-visible:outline focus-visible:outline-2
-                 focus-visible:outline-offset-2 focus-visible:outline-brand-green
-                 transition-colors duration-200 min-h-[56px] cursor-pointer"
+      className="inline-block rounded-xl focus-visible:outline focus-visible:outline-2
+                 focus-visible:outline-offset-4 focus-visible:outline-brand-green
+                 hover:opacity-85 transition-opacity duration-200 cursor-pointer
+                 motion-reduce:transition-none"
     >
-      {isIOS ? (
-        <svg viewBox="0 0 24 24" className="h-7 w-7 shrink-0" fill="currentColor" aria-hidden="true">
-          <path d="M16.365 1.43c0 1.14-.42 2.2-1.12 3.01-.85.99-2.24 1.76-3.38 1.67a3.6 3.6 0 0 1 1.14-2.9c.77-.86 2.1-1.5 3.36-1.78ZM20.5 17.1c-.55 1.27-.82 1.84-1.53 2.96-.99 1.56-2.39 3.5-4.12 3.52-1.54.01-1.93-1-4.02-.99-2.09.01-2.52 1.01-4.06.99-1.73-.03-3.06-1.78-4.05-3.34C-.02 16.9-.31 11.8 1.4 9.1c1.2-1.9 3.1-3.01 4.88-3.01 1.82 0 2.96 1 4.47 1 1.46 0 2.35-1 4.45-1 1.59 0 3.27.86 4.47 2.35-3.93 2.15-3.29 7.76.83 8.66Z" />
-        </svg>
-      ) : (
-        <svg viewBox="0 0 24 24" className="h-7 w-7 shrink-0" aria-hidden="true">
-          <path fill="#EA4335" d="M3.6 1.8a1.6 1.6 0 0 0-.5 1.16v18.08c0 .45.18.86.5 1.16l10.2-10.2Z" />
-          <path fill="#FBBC04" d="m17.9 8.2-3.2-1.86-3.3 3.3 3.3 3.3 3.24-1.88c.98-.55.98-1.9-.04-2.86Z" />
-          <path fill="#4285F4" d="M3.6 1.8 14.7 6.34 11.4 9.64Z" />
-          <path fill="#34A853" d="M3.6 22.2 11.4 14.4l3.3 3.3Z" />
-        </svg>
-      )}
-      <span className="text-left leading-none">
-        <span className="block text-[10px] uppercase tracking-wide opacity-80">
-          {isIOS ? 'Download on the' : 'Get it on'}
-        </span>
-        <span className="block text-lg font-semibold -mt-0.5">
-          {isIOS ? 'App Store' : 'Google Play'}
-        </span>
-      </span>
+      <img
+        src={isIOS ? '/badges/app-store.png' : '/badges/google-play.png'}
+        alt={isIOS ? 'Download Siena on the App Store' : 'Get Siena on Google Play'}
+        width={849}
+        height={283}
+        loading="lazy"
+        decoding="async"
+        className="h-[56px] w-auto"
+      />
     </a>
   );
 }
