@@ -14,12 +14,34 @@
     <!-- Fonts -->
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
 
-    <!-- Favicon (browser tab) -->
-    <link
-      rel="icon"
-      type="image/png"
-      href="https://static.wixstatic.com/media/4e16d8_432d7efa6b384409b66ee29d3d7f541e~mv2.png"
+    <!-- Link-share preview (WhatsApp, iMessage, Slack, X…).
+         Absolute URLs are required: scrapers do not resolve relative paths.
+         The ?v= query busts the aggressive preview caches those clients keep.
+         This is a SPA (/* rewrites to index.html), so /invite and every other
+         route share this one static tag set. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Siena" />
+    <meta property="og:url" content="https://hellosiena.com/" />
+    <meta property="og:title" content="Siena — Heal, Evolve, Connect" />
+    <meta
+      property="og:description"
+      content="A complete wellness platform for individuals and couples."
     />
+    <meta property="og:image" content="https://hellosiena.com/og-image.png?v=2" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Siena" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Siena — Heal, Evolve, Connect" />
+    <meta
+      name="twitter:description"
+      content="A complete wellness platform for individuals and couples."
+    />
+    <meta name="twitter:image" content="https://hellosiena.com/og-image.png?v=2" />
+
+    <!-- Favicon (browser tab) -->
+    <link rel="icon" type="image/png" href="/favicon.png" />
 
     <!-- PWA: Web App Manifest (Android/Chrome) -->
     <link rel="manifest" href="/manifest.webmanifest" />
@@ -30,11 +52,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
 
     <!-- iOS: Add to Home Screen icon + PWA hints -->
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="https://static.wixstatic.com/media/4e16d8_463e5d082c8645e58e63b0236e755d1b~mv2.png"
-    />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Siena" />

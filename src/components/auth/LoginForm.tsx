@@ -6,8 +6,8 @@
 // Everything a visitor can do here leads to the App Store or Google Play.
 //
 // Preserved deliberately: the hero logo, the "Your Path to Wellness Begins
-// Here" headline and the surrounding copy, the product video, and the FAQ
-// content. Only the presentation around them changed.
+// Here" headline and the surrounding copy, and the FAQ content. Only the
+// presentation around them changed.
 
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -233,33 +233,6 @@ export default function LoginForm() {
           </div>
         </div>
       </section>
-      {/* VIDEO */}
-      <section className="py-16 bg-gradient-to-b from-white to-gray-50" aria-label="App preview video">
-        <div className="max-w-7xl mx-auto px-6">
-          <div
-            className="relative rounded-[28px] p-[2.5px] bg-gradient-to-r from-[#e88584] via-[#0068aa] via-[#FFA600] via-[#B1E006] to-[#ea697c]"
-          >
-            <div className="rounded-[26px] overflow-hidden bg-black">
-              <div className="relative w-full">
-                <div className="aspect-video w-full">
-                  <video
-                    src="https://video.wixstatic.com/video/4e16d8_84364cfb6bc54aa98c0ef045dc4a246f/1080p/mp4/file.mp4"
-                    className="w-full h-full object-contain bg-black"
-                    controls
-                    playsInline
-                    preload="metadata"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <style>{`
-            @media (min-width: 1024px) { .aspect-video { height: 720px; } }
-            @media (min-width: 768px) and (max-width: 1023.98px) { .aspect-video { height: 600px; } }
-          `}</style>
-        </div>
-      </section>
-
       {/* PRICING — informational only, no web checkout */}
       <section id="pricing" className="py-20 bg-gray-50 text-gray-900" aria-label="Pricing">
         <div className="max-w-6xl mx-auto px-6">

@@ -12,13 +12,13 @@
   "theme_color": "#01B1AF",
   "icons": [
     {
-      "src": "https://static.wixstatic.com/media/4e16d8_a6b877023f1f4463b6931d9d69e31d91~mv2.png",
+      "src": "/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://static.wixstatic.com/media/4e16d8_3795ed6350f04999a78d2ef240240301~mv2.png",
+      "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -29,7 +29,7 @@
       "name": "Sign in",
       "short_name": "Login",
       "url": "/login",
-      "icons": [{ "src": "https://static.wixstatic.com/media/4e16d8_a6b877023f1f4463b6931d9d69e31d91~mv2.png", "sizes": "192x192", "type": "image/png" }]
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" }]
     }
   ]
 }

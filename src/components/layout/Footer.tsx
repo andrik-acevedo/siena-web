@@ -19,9 +19,6 @@ export default function Footer() {
             <Link to="/terms-of-service" className="text-xs sm:text-sm text-gray-300 hover:text-gray-100 whitespace-nowrap">
               Terms of Service
             </Link>
-            <Link to="/affiliate" className="text-xs sm:text-sm text-gray-300 hover:text-gray-100 whitespace-nowrap">
-              Affiliate Program
-            </Link>
             <button
               onClick={() => setShowDisclaimer(true)}
               className="inline-flex items-center text-xs sm:text-sm text-gray-300 hover:text-gray-100 whitespace-nowrap"
