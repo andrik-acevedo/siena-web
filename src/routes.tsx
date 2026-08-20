@@ -29,6 +29,7 @@ import PrivacyPolicy from './components/legal/PrivacyPolicy';
 import TermsOfService from './components/legal/TermsOfService';
 import AffiliateTermsPage from './components/legal/AffiliateTermsPage';
 import InvitePage from './components/invite/InvitePage';
+import DownloadPage from './components/download/DownloadPage';
 
 export default function AppRoutes() {
   return (
@@ -50,6 +51,10 @@ export default function AppRoutes() {
           {/* Partner invite landing page. Reads ?code=, shows it, links to the
               app stores. Makes no backend call. */}
           <Route path="/invite" element={<InvitePage />} />
+
+          {/* Smart download link. Detects the device and sends mobile straight
+              to its store; desktop gets QR codes instead. */}
+          <Route path="/download" element={<DownloadPage />} />
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

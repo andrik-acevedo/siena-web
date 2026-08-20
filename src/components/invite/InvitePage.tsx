@@ -12,24 +12,12 @@
 // No data is collected here. The code is validated only when it is actually
 // used, in the app or in the web signup form.
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import StoreBadge, { APP_STORE_URL, PLAY_STORE_URL } from '../ui/StoreBadge';
+import { usePlatform } from '../../lib/platform';
 
 
-type Platform = 'ios' | 'android' | 'desktop';
-
-function detectPlatform(): Platform {
-  if (typeof navigator === 'undefined') return 'desktop';
-  const ua = navigator.userAgent || '';
-  if (/android/i.test(ua)) return 'android';
-  // iPadOS 13+ reports as Macintosh, so check for touch support as well.
-  const iOSLike =
-    /iPad|iPhone|iPod/.test(ua) ||
-    (/Macintosh/.test(ua) && typeof document !== 'undefined' && 'ontouchend' in document);
-  if (iOSLike) return 'ios';
-  return 'desktop';
-}
 
 export default function InvitePage() {
   const [searchParams] = useSearchParams();
@@ -42,7 +30,7 @@ export default function InvitePage() {
     .trim()
     .toUpperCase();
 
-  const platform = useMemo(detectPlatform, []);
+  const platform = usePlatform();
 
   // Stash the code so that if this person signs up in the browser, UserContext
   // can link them to the inviter. That lookup already existed and reads exactly

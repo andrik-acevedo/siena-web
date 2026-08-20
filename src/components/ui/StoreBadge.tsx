@@ -10,49 +10,12 @@
 // phone.
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { usePlatform } from '../../lib/platform';
 
 export const APP_STORE_URL = 'https://apps.apple.com/app/id6786386711';
 export const PLAY_STORE_URL =
   'https://play.google.com/store/apps/details?id=com.siena.wellness';
 
-/**
- * True on a desktop-class device.
- *
- * Primary signal is `(pointer: coarse)`, which asks what the input device
- * actually is rather than guessing from width: a narrow desktop window is
- * still a desktop, and a large tablet is still touch. User agent is only a
- * fallback for browsers that do not report pointer type. Viewport width is
- * deliberately not used.
- *
- * Re-evaluates on change so a device with both inputs, or a browser whose
- * media query resolves late, does not get stuck on the initial answer.
- */
-function useIsDesktop(): boolean {
-  const query = '(pointer: coarse)';
-
-  const read = () => {
-    if (typeof window === 'undefined') return false;
-    if (window.matchMedia) {
-      const mql = window.matchMedia(query);
-      // Only trust a positive coarse-pointer result; some browsers report
-      // no match when they simply do not implement the feature.
-      if (mql.media === query) return !mql.matches;
-    }
-    return !/Android|iPhone|iPad|iPod|Mobile|Silk/i.test(navigator.userAgent);
-  };
-
-  const [isDesktop, setIsDesktop] = useState(read);
-
-  useEffect(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) return;
-    const mql = window.matchMedia(query);
-    const onChange = () => setIsDesktop(read());
-    mql.addEventListener('change', onChange);
-    return () => mql.removeEventListener('change', onChange);
-  }, []);
-
-  return isDesktop;
-}
 
 function QrModal({
   platform,
@@ -140,7 +103,7 @@ export default function StoreBadge({
   className?: string;
 }) {
   const isIOS = platform === 'ios';
-  const isDesktop = useIsDesktop();
+  const isDesktop = usePlatform() === 'desktop';
   const [qrOpen, setQrOpen] = useState(false);
 
   const label = isIOS
