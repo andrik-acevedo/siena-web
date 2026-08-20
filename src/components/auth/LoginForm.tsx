@@ -26,44 +26,8 @@ import {
   Sparkles,
   Target,
 } from 'lucide-react';
+import StoreBadge, { APP_STORE_URL, PLAY_STORE_URL } from '../ui/StoreBadge';
 
-const APP_STORE_URL = 'https://apps.apple.com/app/id6786386711';
-const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=com.siena.wellness';
-
-/**
- * Official App Store / Google Play badge.
- *
- * Uses the supplied artwork rather than a drawn approximation: both stores
- * require their badge to appear unmodified, so it is rendered as an image at a
- * fixed height with width:auto to preserve the 3:1 aspect ratio.
- *
- * The badge already contains the wording, so the <img> alt carries the action
- * for screen readers and the link needs no visible label.
- */
-function StoreBadge({ href, platform }: { href: string; platform: 'ios' | 'android' }) {
-  const isIOS = platform === 'ios';
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="inline-block rounded-xl focus-visible:outline focus-visible:outline-2
-                 focus-visible:outline-offset-4 focus-visible:outline-brand-green
-                 hover:opacity-85 transition-opacity duration-200 cursor-pointer
-                 motion-reduce:transition-none"
-    >
-      <img
-        src={isIOS ? '/badges/app-store.png' : '/badges/google-play.png'}
-        alt={isIOS ? 'Download Siena on the App Store' : 'Get Siena on Google Play'}
-        width={849}
-        height={283}
-        loading="lazy"
-        decoding="async"
-        className="h-[56px] w-auto"
-      />
-    </a>
-  );
-}
 
 // Features are grouped the way the app is actually organised. Every entry maps
 // to a real screen in the mobile app; nothing here is aspirational. "SMS Text

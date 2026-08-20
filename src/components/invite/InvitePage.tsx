@@ -14,10 +14,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
+import StoreBadge, { APP_STORE_URL, PLAY_STORE_URL } from '../ui/StoreBadge';
 
-const APP_STORE_URL = 'https://apps.apple.com/app/id6786386711';
-const PLAY_STORE_URL =
-  'https://play.google.com/store/apps/details?id=com.siena.wellness';
 
 type Platform = 'ios' | 'android' | 'desktop';
 
@@ -70,113 +68,124 @@ export default function InvitePage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center justify-center px-6 py-16">
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-5 py-14">
       <div className="w-full max-w-md">
-        <div className="text-center mb-10">
-          <h1 className="text-3xl font-bold text-brand-blue mb-3">
-            You've been invited to Siena
-          </h1>
-          <p className="text-gray-600 leading-relaxed">
-            Siena is a wellness and relationship app for individuals and couples,
-            built by licensed therapists. Someone would like to connect with you
-            as their partner.
-          </p>
-        </div>
-
-        {code ? (
-          <div className="mb-10">
-            <p className="text-xs font-semibold text-gray-500 tracking-wide uppercase text-center mb-3">
-              Your invite code
+        {/* Single elevated card. Previously the content sat bare on white with
+            no containment, so the sections read as a loose stack. */}
+        <div className="rounded-3xl bg-white border border-gray-200 shadow-sm p-7 sm:p-9">
+          <header className="text-center mb-8">
+            <h1 className="text-[26px] leading-tight font-bold text-brand-blue mb-3">
+              You've been invited to Siena
+            </h1>
+            <p className="text-[15px] text-gray-600 leading-relaxed">
+              Siena is a wellness and relationship app for individuals and couples,
+              built by licensed therapists. Someone would like to connect with you
+              as their partner.
             </p>
-            <div className="border-2 border-brand-green rounded-2xl p-6 text-center bg-brand-green/5">
-              <p className="text-4xl font-bold tracking-[0.2em] text-brand-blue font-mono break-all">
-                {code}
+          </header>
+
+          {code ? (
+            <section className="mb-8" aria-label="Your invite code">
+              <p className="text-[11px] font-semibold text-gray-500 tracking-[0.12em] uppercase text-center mb-3">
+                Your invite code
+              </p>
+              <div className="rounded-2xl border-2 border-brand-green bg-brand-green/5 px-5 py-6 text-center">
+                <p className="text-[34px] leading-none font-bold tracking-[0.18em] text-brand-blue font-mono tabular-nums break-all">
+                  {code}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={copyCode}
+                aria-live="polite"
+                className={`mt-2.5 w-full min-h-[48px] rounded-xl border font-semibold text-[15px]
+                            transition-colors duration-200 cursor-pointer
+                            focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+                            focus-visible:outline-brand-green ${
+                              copied
+                                ? 'border-brand-green bg-brand-green/10 text-brand-green'
+                                : 'border-gray-300 text-brand-blue hover:bg-gray-50'
+                            }`}
+              >
+                {copied ? 'Copied to clipboard' : 'Copy code'}
+              </button>
+              <p className="mt-4 text-[13px] text-gray-500 text-center leading-relaxed">
+                Write this down or copy it now. After you install Siena and create
+                your account, enter it in{' '}
+                <strong className="font-semibold text-gray-700">
+                  Profile &rarr; Connect with your partner
+                </strong>
+                .
+              </p>
+            </section>
+          ) : (
+            <div className="mb-8 rounded-2xl border border-amber-300 bg-amber-50 p-4">
+              <p className="text-[13px] text-amber-900 leading-relaxed">
+                This link is missing its invite code. Ask your partner to send the
+                invite again from the Siena app, or enter their code manually in
+                Profile once you have installed it.
               </p>
             </div>
-            <button
-              onClick={copyCode}
-              className="mt-3 w-full py-3 rounded-xl border border-gray-300 text-brand-blue font-semibold hover:bg-gray-50 transition-colors"
+          )}
+
+          {/* Primary action. Fires the app's deep link, which the app handles
+              whether it was already installed or has just been downloaded and
+              the visitor has come back to this page. There is no reliable way
+              to detect installation from the browser, so the helper text below
+              carries that instruction rather than any branching. */}
+          {code && platform !== 'desktop' && (
+            <a
+              href={`siena://invite?code=${encodeURIComponent(code)}`}
+              className="block w-full min-h-[56px] flex items-center justify-center
+                         rounded-2xl bg-brand-green text-white font-bold text-[17px]
+                         shadow-sm hover:shadow-md hover:opacity-95 transition-all duration-200
+                         cursor-pointer motion-reduce:transition-none
+                         focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+                         focus-visible:outline-brand-blue"
             >
-              {copied ? 'Copied' : 'Copy code'}
-            </button>
-            <p className="mt-4 text-sm text-gray-600 text-center leading-relaxed">
-              Write this down or copy it now. After you install Siena and create
-              your account, enter it in <strong>Profile &rarr; Connect with your
-              partner</strong>.
-            </p>
-          </div>
-        ) : (
-          <div className="mb-10 border border-amber-300 bg-amber-50 rounded-xl p-4">
-            <p className="text-sm text-amber-900 leading-relaxed">
-              This link is missing its invite code. Ask your partner to send the
-              invite again from the Siena app, or enter their code manually in
-              Profile once you have installed it.
-            </p>
-          </div>
-        )}
+              Add as Partner
+            </a>
+          )}
 
-        {/* Primary action. Fires the app's deep link, which the app handles
-            whether it was already installed or has just been downloaded and
-            the visitor has come back to this page. There is no reliable way
-            to detect installation from the browser, so the helper text below
-            carries that instruction rather than any branching. */}
-        {code && platform !== 'desktop' && (
-          <a
-            href={`siena://invite?code=${encodeURIComponent(code)}`}
-            className="block w-full text-center py-4 rounded-xl bg-brand-green text-white font-bold text-lg hover:opacity-90 transition-opacity mb-3"
-          >
-            Add as Partner
-          </a>
-        )}
+          {platform === 'desktop' ? (
+            <div className="rounded-2xl border border-gray-200 bg-gray-50 p-5 text-center">
+              <p className="text-brand-blue font-semibold text-[15px] mb-1">
+                Open this link on your phone
+              </p>
+              <p className="text-[13px] text-gray-600 leading-relaxed">
+                Siena is a mobile app. Open this page on your iPhone or Android
+                device, then tap "Add as Partner."
+              </p>
+            </div>
+          ) : (
+            <p className="mt-3.5 text-[13px] text-gray-500 text-center leading-relaxed">
+              Already have Siena? Tap "Add as Partner." New here? Download below,
+              then come back and tap "Add as Partner."
+            </p>
+          )}
 
-        {platform === 'desktop' ? (
-          <div className="border border-gray-200 rounded-xl p-5 bg-gray-50 mb-6 text-center">
-            <p className="text-brand-blue font-semibold mb-1">
-              Open this link on your phone
+          {/* Both stores, every platform. The visitor may be installing for a
+              partner on the other OS, and after installing they return here to
+              tap Add as Partner. Same badge component as the home page. */}
+          <div className="mt-7 pt-7 border-t border-gray-200">
+            <p className="text-[11px] font-semibold text-gray-500 tracking-[0.12em] uppercase text-center mb-4">
+              Get the app
             </p>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              Siena is a mobile app. Open this page on your iPhone or Android
-              device, then tap "Add as Partner."
-            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+              <StoreBadge href={APP_STORE_URL} platform="ios" />
+              <StoreBadge href={PLAY_STORE_URL} platform="android" />
+            </div>
           </div>
-        ) : (
-          <p className="text-sm text-gray-600 text-center leading-relaxed mb-6">
-            Already have Siena? Tap "Add as Partner." New here? Download below,
-            then come back and tap "Add as Partner."
-          </p>
-        )}
-
-        {/* Both stores, every platform. The visitor may be installing for a
-            partner on the other OS, and after installing they return here to
-            tap Add as Partner. */}
-        <div className="flex flex-col gap-2">
-          <a
-            href={APP_STORE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full text-center py-3 rounded-xl border border-gray-300 text-brand-blue font-semibold hover:bg-gray-50 transition-colors"
-          >
-            Download for iPhone
-          </a>
-          <a
-            href={PLAY_STORE_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full text-center py-3 rounded-xl border border-gray-300 text-brand-blue font-semibold hover:bg-gray-50 transition-colors"
-          >
-            Download for Android
-          </a>
         </div>
 
-        {/* No "continue in your browser" option on purpose. There is no web
-            signup: accounts live in the mobile app, and the web signup form
-            validated invite codes against a different Supabase project, so a
-            code from the app would always have been rejected there. */}
-
-        <p className="mt-10 text-xs text-gray-400 text-center leading-relaxed">
+        <p className="mt-7 text-[12px] text-gray-400 text-center leading-relaxed">
           Siena is a self-guided wellness tool and is not a substitute for
           therapy or medical care.{' '}
-          <Link to="/privacy" className="underline hover:text-gray-600">
+          <Link
+            to="/privacy"
+            className="underline hover:text-gray-600 focus-visible:outline focus-visible:outline-2
+                       focus-visible:outline-offset-2 focus-visible:outline-brand-green rounded"
+          >
             Privacy Policy
           </Link>
         </p>
