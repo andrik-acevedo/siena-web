@@ -116,46 +116,11 @@ export default function InvitePage() {
             </div>
           )}
 
-          {/* Primary action. Fires the app's deep link, which the app handles
-              whether it was already installed or has just been downloaded and
-              the visitor has come back to this page. There is no reliable way
-              to detect installation from the browser, so the helper text below
-              carries that instruction rather than any branching. */}
-          {code && platform !== 'desktop' && (
-            <a
-              href={`siena://invite?code=${encodeURIComponent(code)}`}
-              className="block w-full min-h-[56px] flex items-center justify-center
-                         rounded-2xl bg-brand-green text-white font-bold text-[17px]
-                         shadow-sm hover:shadow-md hover:opacity-95 transition-all duration-200
-                         cursor-pointer motion-reduce:transition-none
-                         focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
-                         focus-visible:outline-brand-blue"
-            >
-              Add as Partner
-            </a>
-          )}
-
-          {platform === 'desktop' ? (
-            <div className="rounded-2xl border border-gray-200 bg-gray-50 p-5 text-center">
-              <p className="text-brand-blue font-semibold text-[15px] mb-1">
-                Open this link on your phone
-              </p>
-              <p className="text-[13px] text-gray-600 leading-relaxed">
-                Siena is a mobile app. Open this page on your iPhone or Android
-                device, then tap "Add as Partner."
-              </p>
-            </div>
-          ) : (
-            <p className="mt-3.5 text-[13px] text-gray-500 text-center leading-relaxed">
-              Already have Siena? Tap "Add as Partner." New here? Download below,
-              then come back and tap "Add as Partner."
-            </p>
-          )}
-
-          {/* Both stores, every platform. The visitor may be installing for a
-              partner on the other OS, and after installing they return here to
-              tap Add as Partner. Same badge component as the home page. */}
-          <div className="mt-7 pt-7 border-t border-gray-200">
+          {/* Download first: the visitor needs the app installed before the
+              deep link below can do anything. Both stores, every platform —
+              they may be installing for a partner on the other OS. Same badge
+              component as the home page. */}
+          <div className="pt-7 border-t border-gray-200">
             <p className="text-[11px] font-semibold text-gray-500 tracking-[0.12em] uppercase text-center mb-4">
               Get the app
             </p>
@@ -163,6 +128,44 @@ export default function InvitePage() {
               <StoreBadge href={APP_STORE_URL} platform="ios" />
               <StoreBadge href={PLAY_STORE_URL} platform="android" />
             </div>
+          </div>
+
+          <div className="mt-7 pt-7 border-t border-gray-200">
+            {/* Then link the two accounts. Fires the app's deep link, which the app handles
+                whether it was already installed or has just been downloaded and
+                the visitor has come back to this page. There is no reliable way
+                to detect installation from the browser, so the helper text below
+                carries that instruction rather than any branching. */}
+            {code && platform !== 'desktop' && (
+              <a
+                href={`siena://invite?code=${encodeURIComponent(code)}`}
+                className="block w-full min-h-[56px] flex items-center justify-center
+                           rounded-2xl bg-brand-green text-white font-bold text-[17px]
+                           shadow-sm hover:shadow-md hover:opacity-95 transition-all duration-200
+                           cursor-pointer motion-reduce:transition-none
+                           focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+                           focus-visible:outline-brand-blue"
+              >
+                Link with your partner
+              </a>
+            )}
+
+            {platform === 'desktop' ? (
+              <div className="rounded-2xl border border-gray-200 bg-gray-50 p-5 text-center">
+                <p className="text-brand-blue font-semibold text-[15px] mb-1">
+                  Open this link on your phone
+                </p>
+                <p className="text-[13px] text-gray-600 leading-relaxed">
+                  Siena is a mobile app. Open this page on your iPhone or Android
+                  device, then tap "Link with your partner."
+                </p>
+              </div>
+            ) : (
+              <p className="mt-3.5 text-[13px] text-gray-500 text-center leading-relaxed">
+                Already have Siena? Tap "Link with your partner." New here? Download it
+                above, then come back and tap "Link with your partner."
+              </p>
+            )}
           </div>
         </div>
 
